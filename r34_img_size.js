@@ -14,11 +14,32 @@
 (function() {
 	'use strict';
 
-	const img = document.querySelector(`img#image`);
-	console.log(img);
+	const FRAME_WIDTH = 1200;
+	const FRAME_HEIGHT = 1200 * 9 / 16;
 
-	if (img.height / img.width < 1) { const style = {} }
-	else (img.height / img.width < 1) { const style = {} }
+	const body = document.body;
+	const frame = {x: body.clientWidth, y: body.clientHeight};
+	const img = document.querySelector(`img#image`);
+	// console.log(img);
+
+	// const maxWidth = img.width * Math.min(1, FRAME_WIDTH / img.width);
+	// const maxHeight = img.height * Math.min(1, FRAME_HEIGHT / img.height);
+
+	// const style = (img.height / img.width < 1) ? {
+	// 	height: "auto",
+	// 	// width: "calc(100vh - 113px)"
+	// 	width: "min(calc(100vh - 127px), 1200px)"
+	// } : {
+	// 	width: "auto",
+	// 	height: "min(calc(100vh - 127px))"
+	// };
+
+	// const img = document.querySelector(`img#image`); 
+	Object.assign(img.style, {
+		width:	`min(calc(calc(100vh - 127px) * ${img.width / img.height}), calc(min(100vw, 1200)))`,
+		height:	`min(calc(100vh - 127px)), calc(min(100vw, 1200) * ${img.height / img.width}))`,
+	})
+
 	
 	Object.assign(img.style, style)
 })();
