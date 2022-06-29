@@ -36,10 +36,17 @@
 
 	const img = document.querySelector(`img#image`);
 	const aspect = img.width / img.height;
-	Object.assign(img.style, {
-		width:	`min(calc(calc(100vh - 127px) * ${aspect}), max(calc(100vw * 0.70710678118), 1200))`,
-		height:	`min(calc(100vh - 127px)), max(calc(100vw * 0.70710678118), 1200) * ${1 / aspect}))`,
+	Object.assign(img.style, (aspect < 0.5) ? {
+		height:	`calc(calc(100vh - 127px) * ${1 / aspect})`,
+		width:	`calc(100vh - 127px)`
+	} : {
+		width:	`calc(calc(100vh - 127px) * ${aspect})`,
+		height:	`calc(100vh - 127px)`
 	});
+	// Object.assign(img.style, {
+	// 	width:	`min(calc(calc(100vh - 127px) * ${aspect}), max(calc(100vw * 0.70710678118), 1200))`,
+	// 	height:	`min(calc(100vh - 127px)), max(calc(100vw * 0.70710678118), 1200) * ${1 / aspect}))`
+	// });
 
 	
 	// Object.assign(img.style, style)
