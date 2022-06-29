@@ -19,7 +19,7 @@
 
 	const body = document.body;
 	const frame = {x: body.clientWidth, y: body.clientHeight};
-	const img = document.querySelector(`img#image`);
+	// const img = document.querySelector(`img#image`);
 	// console.log(img);
 
 	// const maxWidth = img.width * Math.min(1, FRAME_WIDTH / img.width);
@@ -34,12 +34,13 @@
 	// 	height: "min(calc(100vh - 127px))"
 	// };
 
-	// const img = document.querySelector(`img#image`); 
+	const img = document.querySelector(`img#image`);
+	const aspect = img.width / img.height;
 	Object.assign(img.style, {
-		width:	`min(calc(calc(100vh - 127px) * ${img.width / img.height}), calc(min(100vw, 1200)))`,
-		height:	`min(calc(100vh - 127px)), calc(min(100vw, 1200) * ${img.height / img.width}))`,
-	})
+		width:	`min(calc(calc(100vh - 127px) * ${aspect}), max(calc(100vw * 0.70710678118), 1200))`,
+		height:	`min(calc(100vh - 127px)), max(calc(100vw * 0.70710678118), 1200) * ${1 / aspect}))`,
+	});
 
 	
-	Object.assign(img.style, style)
+	// Object.assign(img.style, style)
 })();
