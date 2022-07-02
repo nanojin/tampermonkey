@@ -43,6 +43,9 @@
 		width:	`calc(calc(100vh - 127px) * ${aspect})`,
 		height:	`calc(100vh - 127px)`
 	});
+
+	// while (img.previousElementSibling) img.previousElementSibling.remove();
+	while (img.previousElementSibling) img.parentElement.insertBefore(img, img.previousElementSibling);
 	// Object.assign(img.style, {
 	// 	width:	`min(calc(calc(100vh - 127px) * ${aspect}), max(calc(100vw * 0.70710678118), 1200))`,
 	// 	height:	`min(calc(100vh - 127px)), max(calc(100vw * 0.70710678118), 1200) * ${1 / aspect}))`
