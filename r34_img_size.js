@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name				R34 Img Resiz
 // @author				Nano
-// @version				0.0.002.4
+// @version				0.0.002.5
 // @namespace			http://tampermonkey.net/
 // @match				https://rule34.xxx/index.php?*id=*
 // @icon				https://www.google.com/s2/favicons?sz=256&domain=rule34.xxx
@@ -20,20 +20,8 @@
 
 	const media = document.querySelector(`video#gelcomVideoPlayer`) || document.querySelector('img#image')
 
-	media.onloadeddata = () => {
-		const aspect = media.localName === "video" ? media.videoWidth / media.videoHeight : media.clientWidth / media.clientHeight
-
-		const body = document.body;
-		const rc = document.querySelector('#right-col')
-		const parent = rc.parentElement
-		
+	{
 		const	tb = document.createElement('table')
-		// const	tbv = document.createElement('td')	// vertical table
-		
-		// let		tr = []
-		// for(var i = 0; i < ROWS; i++) {
-		// 	tr.push(document.createElement('tr'))
-		// }
 
 		const	content = document.createElement('td')
 		const	layout = document.createElement('td')
@@ -41,12 +29,14 @@
 
 		layout.append(document.querySelector('#long-notice'), document.querySelector('#notice'), document.querySelector('#content'))
 		tb.append(tags, content, layout)
-		// tb.append(tags, tbv)
-		// tbv.append(content, layout)
 		document.querySelector('#header').insertAdjacentElement("afterend", tb)
 
-		content.append(media)
 		tags.append(document.querySelector('div.sidebar'))
+		content.append(media)
+	}
+
+	media.onloadeddata = () => {
+		const aspect = media.localName === "video" ? media.videoWidth / media.videoHeight : media.clientWidth / media.clientHeight
 
 		const calc = new Object()
 
