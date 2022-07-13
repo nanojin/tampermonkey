@@ -1,11 +1,11 @@
 // ==UserScript==
 // @name				R34 Img Resiz
 // @author				Nano
-// @version				0.0.002.5
+// @version				0.0.002.6
 // @namespace			http://tampermonkey.net/
 // @match				https://rule34.xxx/index.php?*id=*
 // @icon				https://www.google.com/s2/favicons?sz=256&domain=rule34.xxx
-// @require				https://raw.githubusercontent.com/nanojin/tampermonkey/main/r34_img_size.js
+// // @require				https://raw.githubusercontent.com/nanojin/tampermonkey/main/r34_img_size.js
 // @updateURL			https://raw.githubusercontent.com/nanojin/tampermonkey/main/r34_img_size.js
 // @downloadURL			https://raw.githubusercontent.com/nanojin/tampermonkey/main/r34_img_size.js
 // @grant				none
