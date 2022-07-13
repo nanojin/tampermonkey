@@ -28,7 +28,7 @@
 		width: `auto`
 	})
 
-	// Something random. L += dL = (1 - (300 / (300 + n_0))) // This is a leveling idea for gained XP after a game. It's based on 100 points, with an average of 200 points per session. The curve flattens as x approaches infinity. The maximum XP gained is always < 1.
+	// Something random. L += dL = (1 - (300 / (300 + n_0))) // This is a leveling idea for gained XP after a game. It's based on 100 points per performant result, with 100 being the expected 'good' value, with an average of 200 points per session. The curve flattens as x approaches infinity. The maximum XP gained is always < 1.
 
 	const body = document.body;
 	const rc = document.querySelector('#right-col')
