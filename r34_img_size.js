@@ -1,27 +1,15 @@
 // ==UserScript==
-// @name				 R34 Img Resiz
+// @name				R34 Img Resiz
+// @author				Nano
+// @version				0.0
 // @namespace			http://tampermonkey.net/
-// @updateURL			
-// @version				0.1
-// @description			try to take over the world!
-// @author				You
 // @match				https://rule34.xxx/index.php?*id=*
-// @include				https://rule34.xxx/index.php?page=post&s=view&id=*
 // @icon				https://www.google.com/s2/favicons?sz=256&domain=rule34.xxx
+// @require				https://raw.githubusercontent.com/nanojin/tampermonkey/main/r34_img_size.js
+// @updateURL			https://raw.githubusercontent.com/nanojin/tampermonkey/main/r34_img_size.js
+// @downloadURL			https://raw.githubusercontent.com/nanojin/tampermonkey/main/r34_img_size.js
 // @grant				none
 // ==/UserScript==
-
-/* // ==UserScript==
-// @name         R34 Img Resiz
-// @namespace    http://tampermonkey.net/
-// @version      0.1
-// @description  try to take over the world!
-// @author       You
-// @match        https://rule34.xxx/index.php?*id=*
-// @icon         https://www.google.com/s2/favicons?sz=256&domain=rule34.xxx
-// @grant        none
-// ==/UserScript== */
-
 
 (function() {
 	'use strict';
