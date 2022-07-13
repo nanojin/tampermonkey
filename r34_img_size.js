@@ -18,42 +18,58 @@
 	const FRAME_HEIGHT = 1200 * 9 / 16;
 	const ROWS = 2
 
-	const img = document.querySelector(`img#image`);
-	const aspect = img.width / img.height;
-	Object.assign(img.style, (aspect < 0.5) ? {
-		height: `auto`,
-		width: `100%`
-	} : {
-		height: `100%`,
-		width: `auto`
-	})
+	const media = document.querySelector(`video#gelcomVideoPlayer`) || document.querySelector('img#image')
 
-	// Something random. L += dL = (1 - (300 / (300 + n_0))) // This is a leveling idea for gained XP after a game. It's based on 100 points per performant result, with 100 being the expected 'good' value, with an average of 200 points per session. The curve flattens as x approaches infinity. The maximum XP gained is always < 1.
+	media.onloadeddata = () => {
+		const aspect = media.localName === "video" ? media.videoWidth / media.videoHeight : media.clientWidth / media.clientHeight
 
-	const body = document.body;
-	const rc = document.querySelector('#right-col')
-	const parent = rc.parentElement
-	
-	const	tb = document.createElement('table')
-	
-	// let		tr = []
-	// for(var i = 0; i < ROWS; i++) {
-	// 	tr.push(document.createElement('tr'))
-	// }
+		const body = document.body;
+		const rc = document.querySelector('#right-col')
+		const parent = rc.parentElement
+		
+		const	tb = document.createElement('table')
+		
+		// let		tr = []
+		// for(var i = 0; i < ROWS; i++) {
+		// 	tr.push(document.createElement('tr'))
+		// }
 
-	const	content = document.createElement('td')
-	const	layout = document.createElement('td')
-	const	tags = document.createElement('td')
+		const	content = document.createElement('td')
+		const	layout = document.createElement('td')
+		const	tags = document.createElement('td')
 
-	layout.append(document.querySelector('#long-notice'), document.querySelector('#notice'), document.querySelector('#content'))
-	tb.append(content, layout, tags)
-	document.querySelector('#header').insertAdjacentElement("afterend", tb)
+		layout.append(document.querySelector('#long-notice'), document.querySelector('#notice'), document.querySelector('#content'))
+		tb.append(content, layout, tags)
+		document.querySelector('#header').insertAdjacentElement("afterend", tb)
 
-	content.append(img)
+		content.append(media)
 
-	Object.assign(content.style, (aspect < 0.5) ? {
-		width:	`calc(100vh - ${16 + tb.offsetTop}px)`
-	} : {
-		height:	`calc(100vh - ${16 + tb.offsetTop}px)`
-	});
+		const calc = new Object()
+
+		calc.v = `min(100vh, 100vw)`
+		calc.c = `(${calc.v} - ${16 + tb.offsetTop}px)`
+		calc.vh = `calc(${calc.c})`
+		calc.w = `calc(${calc.c} * ${16 / 9})`
+		calc.a =  [`auto`, `100%`]
+
+		// Object.assign(media.style,  {
+		// 	height		: ["auto", "100%"][(aspect < 0.5)],
+		// 	width		: ["100%", "auto"][(aspect < 0.5)],
+		// })
+		Object.assign(media.style,  {
+			width		: '-webkit-fill-available',
+			objectFit	: "contain"
+		})
+		Object.assign(content.style, (aspect < 0.5) ? {
+			width		: calc.vh
+		} : {
+			maxWidth	: calc.w,
+			height		: calc.vh
+		});
+	}
+
+	// const video = document.querySelector('div.content#right-col video')
+
+	// Something random. L += dL = (1 - 300 / (300 + n_0 ... n_m)) // This is a leveling idea for gained XP after a game. It's based on 100 points per performant result, with 100 being the expected 'good' value, with an average of 200 points per session. The curve flattens as n approaches infinity. The maximum XP gained is always < 1. Based on the average, a score of 200 will yield an average of +0.4 XP gained per level. This remains constant, forever. Likely until some upper level cap exists. There the net gain will be L + min(dL, 1 - L), where L is the current level represented as a float and dL is the pending change in level.
+
 })();
