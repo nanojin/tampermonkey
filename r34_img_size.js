@@ -39,10 +39,11 @@
 		const	tags = document.createElement('td')
 
 		layout.append(document.querySelector('#long-notice'), document.querySelector('#notice'), document.querySelector('#content'))
-		tb.append(content, layout, tags)
+		tb.append(tags, content, layout)
 		document.querySelector('#header').insertAdjacentElement("afterend", tb)
 
 		content.append(media)
+		tags.append(document.querySelector('div.sidebar'))
 
 		const calc = new Object()
 
