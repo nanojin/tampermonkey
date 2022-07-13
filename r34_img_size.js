@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name				R34 Img Resiz
 // @author				Nano
-// @version				0.0.002.2
+// @version				0.0.002.3
 // @namespace			http://tampermonkey.net/
 // @match				https://rule34.xxx/index.php?*id=*
 // @icon				https://www.google.com/s2/favicons?sz=256&domain=rule34.xxx
@@ -35,12 +35,12 @@
 		// 	tr.push(document.createElement('tr'))
 		// }
 
-		const	content = document.createElement('tr')
-		const	layout = document.createElement('tr')
+		const	content = document.createElement('td')
+		const	layout = document.createElement('td')
 		const	tags = document.createElement('td')
 
 		layout.append(document.querySelector('#long-notice'), document.querySelector('#notice'), document.querySelector('#content'))
-		tbv.append(tags, content, layout)
+		tb.append(tags, content, layout)
 		// tb.append(tags, tbv)
 		// tbv.append(content, layout)
 		document.querySelector('#header').insertAdjacentElement("afterend", tb)
