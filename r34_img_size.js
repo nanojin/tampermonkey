@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name				R34 Img Resiz
 // @author				Nano
-// @version				0.0.002.7
+// @version				0.0.002.8
 // @namespace			http://tampermonkey.net/
 // @match				https://rule34.xxx/index.php?*id=*
 // @icon				https://www.google.com/s2/favicons?sz=256&domain=rule34.xxx
@@ -11,63 +11,79 @@
 // @grant				none
 // ==/UserScript==
 
-const media = document.querySelector(`video#gelcomVideoPlayer`) || document.querySelector('img#image')
-const is_video = (media.id === "gelcomVideoPlayer")
 
-const	tb = document.createElement('table')		//	Placeholder Table
-const	content = document.createElement('td')		//	Media Container
-const	layout = document.createElement('td')		//	Leftover Content
-const	tags = document.createElement('td')			//	Tags Sidebar
-
-const reformat = function (aspect) {
-	//	Organize Layout
-	{
-		layout.append(document.querySelector('#long-notice'), document.querySelector('#notice'), document.querySelector('#content'))
-		tb.append(tags, content, layout)
-		document.querySelector('#header').insertAdjacentElement("afterend", tb)
-
-		tags.append(document.querySelector('div.sidebar'))
-		content.append(media)
-	}
-	{
-		const calc = new Object()
-	
-		{
-			calc.v = `min(100vh, 100vw)`
-			calc.c = `(${calc.v} - ${16 + tb.offsetTop}px)`
-			calc.vh = `calc(${calc.c})`
-			calc.w = `calc(${calc.c} * ${16 / 9})`
-			calc.a =  [`auto`, `100%`]
-		}
-
-		// Object.assign(media.style,  {
-		// 	height		: ["auto", "100%"][(aspect < 0.5)],
-		// 	width		: ["100%", "auto"][(aspect < 0.5)],
-		// })
-		Object.assign(media.style,  {
-			width		: '-webkit-fill-available',
-			objectFit	: "contain"
-		})
-		Object.assign(content.style, (aspect < 0.5) ? {
-			width		: calc.vh
-		} : {
-			maxWidth	: calc.w,
-			height		: calc.vh
-		});
-	}
-}
-
-(function() {
+(function () {
 	'use strict';
 
+	const media = document.querySelector(`video#gelcomVideoPlayer`) || document.querySelector('img#image')
+	const is_video = (media.id === "gelcomVideoPlayer")
+
+	const tb = document.createElement('table')				//	Placeholder Table
+	const content = document.createElement('td')			//	Media Divider
+	const layout = document.createElement('td')				//	Leftover Content
+	const tags = document.createElement('td')				//	Tags Divider
+	const sidebar = document.querySelector('div.sidebar')	//	Sidebar Content
+
+	const reformat = function (aspect) {
+		//	Organize Layout
+		{
+			layout.append(document.querySelector('#long-notice'), document.querySelector('#notice'), document.querySelector('#content'))
+			tb.append(tags, content, layout)
+			document.querySelector('#header').insertAdjacentElement("afterend", tb)
+
+			tags.append(sidebar)
+			content.append(media)
+
+			Object.assign(sidebar.style, {
+				maxWidth: `${100 / 8}vw`,
+				minWidth: `min-content`,
+				width: "max-content"
+			})
+		}
+		{
+			const calc = new Object()
+
+			{
+				calc.v = 100
+				calc.v = `min(${calc.v}vh, ${calc.v / Math.pow(2, 0.25)}vw)`
+				calc.cv = `(${calc.v} - ${16 + tb.offsetTop}px)`
+				calc.cw = `(${calc.v} - ${16 + content.offsetLeft * 3}px)`
+				calc.vh = `calc(${calc.cv})`
+				calc.w = `calc(${calc.cw} * ${16 / 9})`
+				calc.a = [`auto`, `100%`]
+			}
+
+			// Object.assign(media.style,  {
+			// 	height		: ["auto", "100%"][(aspect < 0.5)],
+			// 	width		: ["100%", "auto"][(aspect < 0.5)],
+			// })
+			Object.assign(media.style, {
+				width: '-webkit-fill-available',
+				height: '100%',
+				objectFit: "contain"
+			});
+			Object.assign(content.style,
+				(aspect < 0.5) ? {
+					width: calc.vh
+				} : {
+					height: calc.vh
+				},
+				{
+					maxWidth: is_video ? calc.w : ""
+				}
+			// {
+			// 	display: "flex",
+			// 	flexDirection: "column"
+			// }
+			);
+		}
+	}
+
 	// media
-	
 
 	if (is_video) {
 		media.id = "nano-video"
-		media.onloadeddata = () => {
-			reformat(media.videoWidth / media.videoHeight)
-		}
+		media.onloadeddata = reformat(media.videoWidth / media.videoHeight)
 	} else {
 		media.id = "nano-img"
 		reformat(media.clientWidth / media.clientHeight)
