@@ -19,7 +19,7 @@ const	content = document.createElement('td')		//	Media Container
 const	layout = document.createElement('td')		//	Leftover Content
 const	tags = document.createElement('td')			//	Tags Sidebar
 
-const reformat = function (aspect : Number) {
+const reformat = function (aspect) {
 	//	Organize Layout
 	{
 		layout.append(document.querySelector('#long-notice'), document.querySelector('#notice'), document.querySelector('#content'))
