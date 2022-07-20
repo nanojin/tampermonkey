@@ -11,22 +11,17 @@
 // @grant				none
 // ==/UserScript==
 
-(function() {
-	'use strict';
+const media = document.querySelector(`video#gelcomVideoPlayer`) || document.querySelector('img#image')
+const is_video = (media.id === "gelcomVideoPlayer")
 
-	const FRAME_WIDTH = 1200;
-	const FRAME_HEIGHT = 1200 * 9 / 16;
-	const ROWS = 2
+const	tb = document.createElement('table')		//	Placeholder Table
+const	content = document.createElement('td')		//	Media Container
+const	layout = document.createElement('td')		//	Leftover Content
+const	tags = document.createElement('td')			//	Tags Sidebar
 
-	const media = document.querySelector(`video#gelcomVideoPlayer`) || document.querySelector('img#image')
-
+const reformat = function (aspect : Number) {
+	//	Organize Layout
 	{
-		const	tb = document.createElement('table')
-
-		const	content = document.createElement('td')
-		const	layout = document.createElement('td')
-		const	tags = document.createElement('td')
-
 		layout.append(document.querySelector('#long-notice'), document.querySelector('#notice'), document.querySelector('#content'))
 		tb.append(tags, content, layout)
 		document.querySelector('#header').insertAdjacentElement("afterend", tb)
@@ -34,17 +29,16 @@
 		tags.append(document.querySelector('div.sidebar'))
 		content.append(media)
 	}
-
-	media.onloadeddata = () => {
-		const aspect = media.localName === "video" ? media.videoWidth / media.videoHeight : media.clientWidth / media.clientHeight
-
+	{
 		const calc = new Object()
-
-		calc.v = `min(100vh, 100vw)`
-		calc.c = `(${calc.v} - ${16 + tb.offsetTop}px)`
-		calc.vh = `calc(${calc.c})`
-		calc.w = `calc(${calc.c} * ${16 / 9})`
-		calc.a =  [`auto`, `100%`]
+	
+		{
+			calc.v = `min(100vh, 100vw)`
+			calc.c = `(${calc.v} - ${16 + tb.offsetTop}px)`
+			calc.vh = `calc(${calc.c})`
+			calc.w = `calc(${calc.c} * ${16 / 9})`
+			calc.a =  [`auto`, `100%`]
+		}
 
 		// Object.assign(media.style,  {
 		// 	height		: ["auto", "100%"][(aspect < 0.5)],
@@ -60,6 +54,23 @@
 			maxWidth	: calc.w,
 			height		: calc.vh
 		});
+	}
+}
+
+(function() {
+	'use strict';
+
+	// media
+	
+
+	if (is_video) {
+		media.id = "nano-video"
+		media.onloadeddata = () => {
+			reformat(media.videoWidth / media.videoHeight)
+		}
+	} else {
+		media.id = "nano-img"
+		reformat(media.clientWidth / media.clientHeight)
 	}
 
 	// const video = document.querySelector('div.content#right-col video')
