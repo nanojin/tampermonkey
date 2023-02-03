@@ -1,11 +1,13 @@
 // ==UserScript==
 // @name			Image One Clicker
 // @namespace		http://nanosoft.net/
-// @version	  		1.1.2.1
+// @version	  		1.1.2.2
 // @description		AI domination!
 // @author			Nano
 // @match			*://*/*
 // @icon			https://github.com/nanojin/tampermonkey/raw/main/palette.svg
+// @updateURL		https://github.com/nanojin/tampermonkey/raw/main/one_click.js
+// @downloadURL		https://github.com/nanojin/tampermonkey/raw/main/one_click.js
 // @grant			none
 // ==/UserScript==
 
