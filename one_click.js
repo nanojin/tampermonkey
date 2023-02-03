@@ -18,6 +18,21 @@
 
 	const image_click = new AbortController()
 	const form = document.createElement('form')
+	const fetch_image = async src => {
+		const img = await fetch(src)
+		const blob = await img.blob()
+		const url = URL.createObjectURL(blob)
+		
+		a = document.createElement('a')
+		Object.assign(a, {
+			href: url,
+			rel: 'opener',
+			download: new String()
+		})
+		const pop = window.open(url, 'popup')
+		pop.close()
+
+	}
 	const clickReport = (event) => {
 		// if(MouseEvent.altKey === false){
 		// 	return;
@@ -65,15 +80,23 @@
 				return e.localName == 'img'	}
 		).forEach(
 			img => {
-				if(history_map[img.src])
-					return;
+				if(history_map[img.src]) return;
 				history_map[img.src] = true;
-				Object.assign(form, {
-					// download: '',
-					action: img.src
-				})
-				console.log(form)
-				form.submit()
+
+
+
+				// var xhr = new XMLHttpRequest()
+				// xhr.open("GET", img.src)
+				// // xhr.onload = event => {
+				// // 	console.log(`response: ${event.target.response}`)
+				// // }
+				// xhr.send()
+				// Object.assign(form, {
+				// 	// download: '',
+				// 	action: img.src
+				// })
+				// console.log(form)
+				// form.submit()
 			}
 		)
 	}
