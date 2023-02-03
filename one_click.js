@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name			Image One Clicker
 // @namespace		http://nanosoft.net/
-// @version	  		1.1.4
+// @version	  		1.1.5
 // @description		AI domination!
 // @author			Nano
 // @match			*://*/*
@@ -18,18 +18,24 @@
 
 	const image_click = new AbortController()
 	const form = document.createElement('form')
+	// const fetch_image = src => {
 	const fetch_image = async src => {
 		const img = await fetch(src)
+		console.log(img)
 		const blob = await img.blob()
+		console.log(blob)
 		const url = URL.createObjectURL(blob)
+		console.log(url)
 		
-		a = document.createElement('a')
+		const a = document.createElement('a')
 		Object.assign(a, {
 			href: url,
 			rel: 'opener',
-			download: new String()
+			target: 'popup',
+			download: src.split('/').at(-1)
 		})
-		const pop = window.open(url, 'popup')
+		const pop = window.open("", 'popup')
+		a.click()
 		pop.close()
 
 	}
@@ -83,7 +89,7 @@
 				if(history_map[img.src]) return;
 				history_map[img.src] = true;
 
-
+				fetch_image(img.src)
 
 				// var xhr = new XMLHttpRequest()
 				// xhr.open("GET", img.src)
