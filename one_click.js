@@ -8,6 +8,7 @@
 // @icon			https://github.com/nanojin/tampermonkey/raw/main/palette.svg
 // @updateURL		https://github.com/nanojin/tampermonkey/raw/main/one_click.js
 // @downloadURL		https://github.com/nanojin/tampermonkey/raw/main/one_click.js
+// @run-at			document-start
 // @grant			none
 // ==/UserScript==
 
