@@ -69,6 +69,7 @@
 					return;
 				history_map[img.src] = true;
 				Object.assign(form, {
+					// download: '',
 					action: img.src
 				})
 				console.log(form)
@@ -77,6 +78,8 @@
 		)
 	}
 	Object.assign(form, {
+		method: "GET",
+		rel: "noopener",
 		target: "_blank"
 	})
 
