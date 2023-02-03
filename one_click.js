@@ -32,7 +32,7 @@
 			href: url,
 			rel: 'opener',
 			target: 'popup',
-			download: src.split('/').at(-1)
+			download: src.split('/').at(-1).split('?').at(0)
 		})
 		const pop = window.open("", 'popup')
 		a.click()
