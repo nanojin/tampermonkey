@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name			Image Clicker Saver
+// @name			Image One Clicker
 // @namespace		http://nanosoft.net/
 // @version	  		1.1.2.1
 // @description		AI domination!
