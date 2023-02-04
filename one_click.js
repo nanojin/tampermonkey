@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name			Image One Clicker
 // @namespace		http://nanosoft.net/
-// @version	  		1.1.5
+// @version				1.1.5.1
 // @description		AI domination!
 // @author			Nano
 // @match			*://*/*
@@ -9,25 +9,23 @@
 // @updateURL		https://github.com/nanojin/tampermonkey/raw/main/one_click.js
 // @downloadURL		https://github.com/nanojin/tampermonkey/raw/main/one_click.js
 // @run-at			document-start
+// @run-at			document-idle
 // @grant			none
 // ==/UserScript==
 
-(function() {
+(function () {
 	'use strict';
 
 	var history_map = new Map()
 
 	const image_click = new AbortController()
 	const form = document.createElement('form')
-	// const fetch_image = src => {
-	const fetch_image = async src => {
-		const img = await fetch(src)
-		console.log(img)
-		const blob = await img.blob()
-		console.log(blob)
-		const url = URL.createObjectURL(blob)
-		console.log(url)
-		
+	const img_blob = img => {
+		img.onload = function () {
+			this.src = fetch_blobURL(this.src)
+		}
+	}
+	const download_image = src => {
 		const a = document.createElement('a')
 		Object.assign(a, {
 			href: url,
@@ -38,7 +36,20 @@
 		const pop = window.open("", 'popup')
 		a.click()
 		pop.close()
+	}
+	const fetch_blobURL = async src => {
+		return await fetch(src)
+			.then(
+				response => response.blob()
+			).then(
+				blob => URL.createObjectURL(blob)
+			)
+		const blob = await img.blob()
+		console.log(blob)
+		const url = URL.createObjectURL(blob)
+		console.log(url)
 
+		return url
 	}
 	const clickReport = (event) => {
 		// if(MouseEvent.altKey === false){
@@ -49,10 +60,10 @@
 		// Object.assign(a, {download: ''})
 		// //document.querySelectorAll(":hover img"
 		// //).forEach(
-		// //  (img, index) => {
-		// //  Object.assign(a, {href: img.src})
-		// //  console.log(a)
-		// //  a.click()
+		// //	(img, index) => {
+		// //	Object.assign(a, {href: img.src})
+		// //	console.log(a)
+		// //	a.click()
 		// //})
 		// Array.from(
 		// 	document.elementsFromPoint(
@@ -70,12 +81,12 @@
 		// )
 
 		//	Attempting download using the Form element
-				//document.querySelectorAll(":hover img"
+		//document.querySelectorAll(":hover img"
 		//).forEach(
-		//  (img, index) => {
-		//  Object.assign(a, {href: img.src})
-		//  console.log(a)
-		//  a.click()
+		//	(img, index) => {
+		//	Object.assign(a, {href: img.src})
+		//	console.log(a)
+		//	a.click()
 		//})
 		Array.from(
 			document.elementsFromPoint(
@@ -84,26 +95,28 @@
 			)
 		).filter(
 			e => {
-				return e.localName == 'img'	}
+				return e.localName == 'img'
+			}
 		).forEach(
 			img => {
-				if(history_map[img.src]) return;
-				history_map[img.src] = true;
+				if (!history_map[img.src] && (history_map[img.src] = true)) {
 
-				fetch_image(img.src)
 
-				// var xhr = new XMLHttpRequest()
-				// xhr.open("GET", img.src)
-				// // xhr.onload = event => {
-				// // 	console.log(`response: ${event.target.response}`)
-				// // }
-				// xhr.send()
-				// Object.assign(form, {
-				// 	// download: '',
-				// 	action: img.src
-				// })
-				// console.log(form)
-				// form.submit()
+					fetch_blobURL(img.src)
+
+					// var xhr = new XMLHttpRequest()
+					// xhr.open("GET", img.src)
+					// // xhr.onload = event => {
+					// // 	console.log(`response: ${event.target.response}`)
+					// // }
+					// xhr.send()
+					// Object.assign(form, {
+					// 	// download: '',
+					// 	action: img.src
+					// })
+					// console.log(form)
+					// form.submit()
+				}
 			}
 		)
 	}
@@ -112,6 +125,25 @@
 		rel: "noopener",
 		target: "_blank"
 	})
+
+	function src_blob() {
+		document.querySelectorAll('img').forEach(
+			img => {
+				img.filename = img.src.split('/').at(-1).split('?').at(0)
+				img.onload = async () => {
+					if (!img.noreset) {
+						img.src = await fetch(img.src).then(response => response.blob()).then(blob => URL.createObjectURL(blob))
+						img.noreset = true;
+					}
+				}
+			}
+		)
+	}
+
+	src_blob(); // Run on existing img elements
+	const observer = new MutationObserver(
+	)
+	//document.body.addEventListener("change", function(e) {				src_blob()		})
 
 	document.body.append(form)
 	document.addEventListener("click", function (event) { clickReport(event) }, true, { signal: image_click.signal })
