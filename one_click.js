@@ -81,7 +81,7 @@
 	// function src_blob() {
 		document.querySelectorAll('img').forEach(
 			img => {
-				img.onload = (image_blob(img))()
+				img.onload = image_blob(img)
 			}
 		)
 	// }	// src_blob(); // Run on existing img elements
@@ -93,11 +93,12 @@
 	};
 	const observer = new MutationObserver(
 		mutations_list => mutations_list.forEach(
-			mutation => mutation.addedNodes.forEach(
-				node => node.onload = async () => {
-					node = await image_blob(node)
-				}
-			)
+			mutation => console.log(mutation)
+			// mutation => mutation.addedNodes.forEach(
+			// 	node => node.onload = async () => {
+			// 		node = await image_blob(node)
+			// 	}
+			// )
 		)
 	)
 
