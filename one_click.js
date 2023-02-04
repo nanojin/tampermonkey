@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name			Image One Clicker
 // @namespace		http://nanosoft.net/
-// @version				1.1.5.2
+// @version				1.1.6
 // @description		AI domination!
 // @author			Nano
 // @match			*://*/*
@@ -28,7 +28,7 @@
 	const download_image = img => {
 		const a = document.createElement('a')
 		Object.assign(a, {
-			href: url,
+			href: img.src,
 			rel: 'opener',
 			target: 'i1c_popup',
 			download: img.filename
@@ -125,6 +125,17 @@
 		rel: "noopener",
 		target: "_blank"
 	})
+
+	async function image_blob(node) {
+		if (!node.manualset && node.nodeName.toLowerCase() === 'img') {
+			node.filename = node.src.split('/').at(-1).split('?').at(0)
+			node.src = await fetch(node.src)
+			.then(response => response.blob())
+			.then(blob => URL.createObjectURL(blob))
+			node.manualset = true
+		}
+		return node
+	}
 
 	// function src_blob() {
 		document.querySelectorAll('img').forEach(
