@@ -25,15 +25,15 @@
 			this.src = fetch_blobURL(this.src)
 		}
 	}
-	const download_image = src => {
+	const download_image = img => {
 		const a = document.createElement('a')
 		Object.assign(a, {
 			href: url,
 			rel: 'opener',
-			target: 'popup',
-			download: src.split('/').at(-1).split('?').at(0)
+			target: 'i1c_popup',
+			download: img.filename
 		})
-		const pop = window.open("", 'popup')
+		const pop = window.open("", 'i1c_popup')
 		a.click()
 		pop.close()
 	}
@@ -100,9 +100,9 @@
 		).forEach(
 			img => {
 				if (!history_map[img.src] && (history_map[img.src] = true)) {
+					download_image(img)
 
-
-					fetch_blobURL(img.src)
+					// fetch_blobURL(img.src)
 
 					// var xhr = new XMLHttpRequest()
 					// xhr.open("GET", img.src)
