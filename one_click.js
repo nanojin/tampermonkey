@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name			Image One Clicker
 // @namespace		http://nanosoft.net/
-// @version				1.1.6.1
+// @version				1.1.6.2
 // @description		AI domination!
 // @author			Nano
 // @match			*://*/*
@@ -86,18 +86,23 @@
 		)
 	// }	// src_blob(); // Run on existing img elements
 
+	const body = document.body
+	const observerConfig = {
+		childList: true,
+		subtree: true
+	};
 	const observer = new MutationObserver(
 		mutations_list => mutations_list.forEach(
 			mutation => mutation.addedNodes.forEach(
-				node => node.onload = (image_blob(node))()
+				node => node.onload = async () => {
+					node = await image_blob(node)
+				}
 			)
 		)
 	)
 
-	observer.observe(document.body, {
-		subtree: true,
-		childList: true
-	})
+	observer.observe(body, observerConfig);
+
 	// document.body.append(form)
 	document.addEventListener("click", function (event) { clickReport(event) }, true, { signal: image_click.signal })
 })();
