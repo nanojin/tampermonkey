@@ -1,14 +1,15 @@
 // ==UserScript==
 // @name			Image One Clicker
 // @namespace		http://nanosoft.net/
-// @version				1.1.6
+// @version				1.1.6.1
 // @description		AI domination!
 // @author			Nano
 // @match			*://*/*
 // @icon			https://github.com/nanojin/tampermonkey/raw/main/palette.svg
 // @updateURL		https://github.com/nanojin/tampermonkey/raw/main/one_click.js
 // @downloadURL		https://github.com/nanojin/tampermonkey/raw/main/one_click.js
-// @require			https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/md5.js
+//// @require			https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/md5.js
+//// @require			https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/core.js
 // @run-at			document-start
 // @run-at			document-idle
 // @grant			none
@@ -20,11 +21,15 @@
 	var history_map = new Map()
 
 	const image_click = new AbortController()
-	const form = document.createElement('form')
-	const img_blob = img => {
-		img.onload = function () {
-			this.src = fetch_blobURL(this.src)
-		}
+	// const form = document.createElement('form')
+	const check_map = key => {
+		if (
+			history_map[key]
+		)	return (0);
+
+		history_map[key] = true
+		console.log(key)
+		return (1)
 	}
 	const download_image = img => {
 		const a = document.createElement('a')
@@ -38,57 +43,7 @@
 		a.click()
 		pop.close()
 	}
-	const fetch_blobURL = async src => {
-		return await fetch(src)
-			.then(
-				response => response.blob()
-			).then(
-				blob => URL.createObjectURL(blob)
-			)
-		const blob = await img.blob()
-		console.log(blob)
-		const url = URL.createObjectURL(blob)
-		console.log(url)
-
-		return url
-	}
 	const clickReport = (event) => {
-		// if(MouseEvent.altKey === false){
-		// 	return;
-		// }	//	Check for modifier key combo
-
-		// var a = document.createElement('a')
-		// Object.assign(a, {download: ''})
-		// //document.querySelectorAll(":hover img"
-		// //).forEach(
-		// //	(img, index) => {
-		// //	Object.assign(a, {href: img.src})
-		// //	console.log(a)
-		// //	a.click()
-		// //})
-		// Array.from(
-		// 	document.elementsFromPoint(
-		// 		event.clientX,
-		// 		event.clientY
-		// 	)
-		// ).filter(
-		// 	e => {return e.localName == 'img'}
-		// ).forEach(
-		// 	img => {
-		// 		Object.assign(a, {href: img.src})
-		// 		console.log(a)
-		// 		a.click()
-		// 	}
-		// )
-
-		//	Attempting download using the Form element
-		//document.querySelectorAll(":hover img"
-		//).forEach(
-		//	(img, index) => {
-		//	Object.assign(a, {href: img.src})
-		//	console.log(a)
-		//	a.click()
-		//})
 		Array.from(
 			document.elementsFromPoint(
 				event.clientX,
@@ -100,23 +55,17 @@
 			}
 		).forEach(
 			img => {
-				if (!history_map[img.src] && (history_map[img.src] = true)) {
-					// //	Check if file exists, MD5
-					// const reader = new FileReader()
-
-					// if () {
-						//	Only download once per url
-						download_image(img)
-					}
+				if (check_map(img.src)) {
+					download_image(img)
 				}
 			}
 		)
 	}
-	Object.assign(form, {
-		method: "GET",
-		rel: "noopener",
-		target: "_blank"
-	})
+	// Object.assign(form, {
+	// 	method: "GET",
+	// 	rel: "noopener",
+	// 	target: "_blank"
+	// })
 
 	async function image_blob(node) {
 		if (!node.manualset && node.nodeName.toLowerCase() === 'img') {
@@ -132,34 +81,24 @@
 	// function src_blob() {
 		document.querySelectorAll('img').forEach(
 			img => {
-				img.filename = img.src.split('/').at(-1).split('?').at(0)
-				img.onload = async () => {
-					if (!img.noreset) {
-						img.src = await fetch(img.src).then(response => response.blob()).then(blob => URL.createObjectURL(blob))
-						img.noreset = true;
-					}
-				}
+				img.onload = (image_blob(img))()
 			}
 		)
-	// }
+	// }	// src_blob(); // Run on existing img elements
 
-	// src_blob(); // Run on existing img elements
 	const observer = new MutationObserver(
 		mutations_list => mutations_list.forEach(
 			mutation => mutation.addedNodes.forEach(
-				node => node.onload = async () => {
-					if (!node.manualset && node.nodeName.toLowerCase() === 'img') {
-						node.filename = node.src.split('/').at(-1).split('?').at(0)
-						node.src = await fetch(node.src).then(response => response.blob()).then(blob => URL.createObjectURL(blob))
-						node.manualset = true
-					}
-				}
+				node => node.onload = (image_blob(node))()
 			)
 		)
 	)
-	//document.body.addEventListener("change", function(e) {				src_blob()		})
 
-	document.body.append(form)
+	observer.observe(document.body, {
+		subtree: true,
+		childList: true
+	})
+	// document.body.append(form)
 	document.addEventListener("click", function (event) { clickReport(event) }, true, { signal: image_click.signal })
 })();
 
@@ -192,6 +131,7 @@
 		https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map
 		https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter
 		https://developer.mozilla.org/en-US/docs/Glossary/Idempotent
+		https://dev.to/ramonak/javascript-how-to-access-the-return-value-of-a-promise-object-1bck
 	}
 	Icons:	{
 		https://brandeps.com/icon/Design
