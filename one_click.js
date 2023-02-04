@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name			Image One Clicker
 // @namespace		http://nanosoft.net/
-// @version				1.1.5.1
+// @version				1.1.5.2
 // @description		AI domination!
 // @author			Nano
 // @match			*://*/*
@@ -126,7 +126,7 @@
 		target: "_blank"
 	})
 
-	function src_blob() {
+	// function src_blob() {
 		document.querySelectorAll('img').forEach(
 			img => {
 				img.filename = img.src.split('/').at(-1).split('?').at(0)
@@ -138,10 +138,21 @@
 				}
 			}
 		)
-	}
+	// }
 
-	src_blob(); // Run on existing img elements
+	// src_blob(); // Run on existing img elements
 	const observer = new MutationObserver(
+		mutations_list => mutations_list.forEach(
+			mutation => mutation.addedNodes.forEach(
+				node => node.onload = async () => {
+					if (!node.manualset && node.nodeName.toLowerCase() === 'img') {
+						node.filename = node.src.split('/').at(-1).split('?').at(0)
+						node.src = await fetch(node.src).then(response => response.blob()).then(blob => URL.createObjectURL(blob))
+						node.manualset = true
+					}
+				}
+			)
+		)
 	)
 	//document.body.addEventListener("change", function(e) {				src_blob()		})
 
