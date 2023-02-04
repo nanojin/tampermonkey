@@ -8,6 +8,7 @@
 // @icon			https://github.com/nanojin/tampermonkey/raw/main/palette.svg
 // @updateURL		https://github.com/nanojin/tampermonkey/raw/main/one_click.js
 // @downloadURL		https://github.com/nanojin/tampermonkey/raw/main/one_click.js
+// @require			https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/md5.js
 // @run-at			document-start
 // @run-at			document-idle
 // @grant			none
@@ -100,22 +101,13 @@
 		).forEach(
 			img => {
 				if (!history_map[img.src] && (history_map[img.src] = true)) {
-					download_image(img)
+					// //	Check if file exists, MD5
+					// const reader = new FileReader()
 
-					// fetch_blobURL(img.src)
-
-					// var xhr = new XMLHttpRequest()
-					// xhr.open("GET", img.src)
-					// // xhr.onload = event => {
-					// // 	console.log(`response: ${event.target.response}`)
-					// // }
-					// xhr.send()
-					// Object.assign(form, {
-					// 	// download: '',
-					// 	action: img.src
-					// })
-					// console.log(form)
-					// form.submit()
+					// if () {
+						//	Only download once per url
+						download_image(img)
+					}
 				}
 			}
 		)
