@@ -68,7 +68,7 @@
 	// })
 
 	async function image_blob(node) {
-		if (!node.manualset && node.nodeName.toLowerCase() === 'img') {
+		if (!(node.src.split(':').at(0) === 'blob' || node.manualset) && node.nodeName.toLowerCase() === 'img') {
 			node.filename = node.src.split('/').at(-1).split('?').at(0)
 			node.src = await fetch(node.src)
 			.then(response => response.blob())
@@ -102,7 +102,7 @@
 		)
 	)
 
-	observer.observe(body, observerConfig);
+	//observer.observe(body, observerConfig);
 
 	// document.body.append(form)
 	document.addEventListener("click", function (event) { clickReport(event) }, true, { signal: image_click.signal })
