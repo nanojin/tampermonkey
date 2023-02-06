@@ -55,6 +55,7 @@
 			}
 		).forEach(
 			img => {
+				Object.assign(img, image_blob(img))
 				if (check_map(img.src)) {
 					download_image(img)
 				}
@@ -81,7 +82,9 @@
 	// function src_blob() {
 		document.querySelectorAll('img').forEach(
 			img => {
-				img.onload = image_blob(img)
+				img.onload = function () {
+					Object.assign(img, image_blob(img))
+				}
 			}
 		)
 	// }	// src_blob(); // Run on existing img elements
